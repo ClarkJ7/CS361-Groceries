@@ -3,6 +3,8 @@ import requests
 
 app = Flask(__name__)
 
+ingredients = ["tomato", "chicken", "beer"]
+
 @app.route('/')
 def index():
     print("went home")
@@ -11,14 +13,7 @@ def index():
 @app.route('/test')
 def index_test():
     print("went to test")
-    return render_template('test.html')
-
-@app.route('/test/search')
-def api_call():
-    arg1 = request.args['arg1']
-
-    return 'Link is: ' + arg1
-
+    return render_template('home.html', ingredients=ingredients)
 
 
 if __name__ == "__main__":

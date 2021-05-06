@@ -2,10 +2,50 @@
 <html>
 <head>
 	<title>Grocery List</title>
+  <link rel="stylesheet" type="text/css" href="/static/styles.css">
 </head>
+
 <body>
-<h1>THIS IS A GOD DAMN TEST</h1>
-<a href="/test">GO TO TEST</a>
+  <div id="searchBar">
+    <form action="http://127.0.0.1:5000/" method="GET">
+        <input type="text">
+        <input type="submit" value="Get Recipe">
+  </div>
+
+  <table id="outline">
+    <tr>
+      <td>
+        <table class="list">
+          <thead>
+            <tr>
+              <th>INGREDIENTS</th>
+            </tr>
+          </thead>
+          <tbody>
+          	{% for ingredient in ingredients %}
+            <tr>
+              <td>{{ingredient}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </td>
+
+      <td>
+        <table class="list">
+          <thead>
+            <tr>
+              <th>GROCERIES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>list of stuff</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
 
 </body>
 </html>

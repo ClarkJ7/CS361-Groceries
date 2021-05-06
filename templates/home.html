@@ -7,43 +7,35 @@
 
 <body>
   <div id="searchBar">
-    <form action="http://127.0.0.1:5000/" method="GET">
-        <input type="text">
-        <input type="submit" value="Get Recipe">
+    <form action="/" method="POST">
+        <input type="text" name="wikiURL"></input>
+        <input type="submit" value="Get Recipe"></input>
+    </form>
   </div>
+  	<a href="/test">Test</a>
+	<a href="/reset">Reset</a>
+	<a href="/">Home</a>
 
   <table id="outline">
     <tr>
-      <td>
-        <table class="list">
-          <thead>
-            <tr>
-              <th>INGREDIENTS</th>
-            </tr>
-          </thead>
-          <tbody>
-          	{% for ingredient in ingredients %}
-            <tr>
-              <td>{{ingredient}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </td>
 
       <td>
-        <table class="list">
-          <thead>
-            <tr>
-              <th>GROCERIES</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>list of stuff</td>
-            </tr>
-          </tbody>
-        </table>
+      	<h2>Ingredients</h2>.
+        <ul>
+        	{% for ingredient in session['ingredients'] %}
+        	<li>{{ingredient}}</li>
+        	{% endfor %}
+        </ul>
+		<a href="/addrecipe">add</a>
+      </td>
+      		
+      <td>
+      	<h2>Grocery List</h2>
+        <ul>
+        	{% for item in session['groceries'] %}
+        	<li>{{item}}</li>
+        	{% endfor %}
+        </ul>
       </td>
     </tr>
 

@@ -8,28 +8,36 @@ app.config['SECRET_KEY'] = 'password'
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        print("POST METHOD")
+        # retrieve dish name from searchbar
         link = request.form['wikiURL']
+        # format dish name for wikipedia link
+        link = link.title()
+        link = link.replace(" ", "_")
         full_link = 'https://cs361-ul-scraper.herokuapp.com/' + link
+        # send to ulScraper API
         response = requests.get(full_link)
+        # store ingredients in session variable
         session['ingredients'] = response.json()
         return render_template('home.html', ingredients=session['ingredients'])
     if request.method == 'GET':
-        print("GET METHOD")
         return render_template('home.html')
 
 
 @app.route('/reset')
 def reset():
+    # clear ingredient and groceries session variables
     session.pop('ingredients', None)
     session.pop('groceries', None)
     return render_template('home.html')
 
 
-@app.route('/addrecipe', methods=['GET', 'POST'])
+@app.route('/add-recipe', methods=['GET', 'POST'])
 def add_recipe():
+    # check if any ingredients are currently shown
     if session.get('ingredients'):
+        # check if any groceries are currently shown
         if session.get('groceries'):
+            # add ingredients to current groceries
             session['groceries'].extend(session['ingredients'])
         else:
             session['groceries'] = session['ingredients']
@@ -40,4 +48,4 @@ def add_recipe():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True)

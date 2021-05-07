@@ -21,11 +21,12 @@ table {
 
 td {
 	width: 50%;
+	border-radius: 5px;
 }
 
 .bigbutton {
 	display: block;
-	width: 100%;
+	padding: 0px;
 	border: none;
 	background-color: lightblue; 
 	color: black;
@@ -33,16 +34,18 @@ td {
 	font-size: 20px;
 	text-align: center;
 	transition: ease 0.5s;
+	text-decoration: none;
 }
 
 .bigbutton:hover {
 	background-color: darkblue; 
 	color: white;
+	text-decoration: none;
 }
 
 .tablehead {
 	width: 90%;
-	padding: 5% 5%;
+	padding: 2% 5%;
 	margin: 0px;
 	border: none;
 	background-color: lightblue; 

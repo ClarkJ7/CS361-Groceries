@@ -6,37 +6,37 @@
 </head>
 
 <body>
-  <div id="searchBar">
+
+  <div class="searchBar">
     <form action="/" method="POST">
         <input type="text" name="wikiURL"></input>
         <input type="submit" value="Get Recipe"></input>
     </form>
   </div>
-  	<a href="/test">Test</a>
 	<a href="/reset">Reset</a>
-	<a href="/">Home</a>
 
   <table id="outline">
     <tr>
-
       <td>
-      	<h2>Ingredients</h2>.
+      	<p class="tablehead">Ingredients</p>
         <ul>
         	{% for ingredient in session['ingredients'] %}
         	<li>{{ingredient}}</li>
         	{% endfor %}
         </ul>
-		<a href="/addrecipe">add</a>
+        <button type="button" class="bigbutton" action="/addrecipe">Add to Grocery List</button>
       </td>
       		
       <td>
-      	<h2>Grocery List</h2>
+      	<p class="tablehead">Grocery List</p>
         <ul>
         	{% for item in session['groceries'] %}
         	<li>{{item}}</li>
         	{% endfor %}
         </ul>
+        <button type="button" class="bigbutton" action="/addrecipe">Export Grocery List</button>
       </td>
+
     </tr>
 
 </body>

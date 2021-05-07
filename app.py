@@ -18,11 +18,6 @@ def index():
         print("GET METHOD")
         return render_template('home.html')
 
-@app.route('/test')
-def index_test():
-    response = requests.get("https://cs361-ul-scraper.herokuapp.com/Cashew_Chicken")
-    session['ingredients'] = response.json()
-    return render_template('home.html', ingredients=session['ingredients'])
 
 @app.route('/reset')
 def reset():
@@ -30,10 +25,14 @@ def reset():
     session.pop('groceries', None)
     return render_template('home.html')
 
+
 @app.route('/addrecipe', methods=['GET', 'POST'])
 def add_recipe():
     if session.get('ingredients'):
-        session['groceries'] = session['ingredients']
+        if session.get('groceries'):
+            session['groceries'].extend(session['ingredients'])
+        else:
+            session['groceries'] = session['ingredients']
         session.pop('ingredients', None)
         return render_template('home.html', groceries=session['groceries'])
     else:

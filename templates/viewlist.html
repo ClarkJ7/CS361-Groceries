@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Grocery List</title>
+	<link rel="stylesheet" type="text/css" href="/static/styles.css">
+</head>
+<body>
+	<h2>Grocery List</h2>
+	<ul>
+        {% for item in session['groceries'] %}
+        <li>
+        	<a style="color:red">{{item['qty']}}</a>
+        	<a style="color:blue">{{item['unit']}}</a>
+        	<a>{{item['description']}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a href="/" class="bigbutton">Return</a>
+</body>
+</html>

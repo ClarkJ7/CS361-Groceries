@@ -43,7 +43,7 @@ def add_recipe():
         if session.get('groceries'):
             # add ingredients to current groceries
             session['groceries'] = combine_groceries(session['ingredients'], session['groceries'])
-        else:
+        else:a
             session['groceries'] = session['ingredients']
         session.pop('ingredients', None)
         return render_template('home.html', groceries=session['groceries'])

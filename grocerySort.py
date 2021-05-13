@@ -1,6 +1,12 @@
 import re
+from fractions import Fraction
 
-UNITS = ("whole", "teaspoon", "teaspoons", "tsp", "tablespoon", "tablespoons", "tbsp", "tin", "drops", "cloves", "ml", "oz", "grams", "ounces", "kilograms", "lb", "pound", "pounds", "can", "pint", "gallon", "quart")
+UNITS = ("whole", "half", "quarter", "third", "teaspoon", "teaspoons", "tsp", "tablespoon", "tablespoons", "tbsp",
+         "tin", "drops", "cloves", "millilitres", "ml", "oz", "ounce", "ounces", "grams", "ounces", "kilograms", "lb", "pound",
+         "pounds", "can", "cans", "pint", "pints", "gallon", "quart", "cup")
+
+QTY_IDENTIFIERS = {"powder": "oz", "leaves": "oz", "sauce": "tablespoon", "chicken": "lb", "pork": "lb", "beef": "lb",
+                   "wine": "tablespoon"}
 
 SIZES = ("small ", "medium ", "large ")
 
@@ -40,16 +46,16 @@ def sort_recipe(ingredients_list):
 
         # check if line contains qty value add
         try:
-            if float(item[0]):
+            if float(Fraction(item[0])):
                 quantity = item.pop(0)
         except ValueError:
-            quantity = "1"
+            quantity = 0
 
         # if line contains unit value add
         if item[0].lower() in UNITS:
             unit = item.pop(0).lower()
         else:
-            unit = "whole"
+            unit = "unk"
 
         # use rest of line to create item description
         desc = " ".join(item)
@@ -67,7 +73,6 @@ def combine_groceries(ingredients, groceries):
         for j in groceries:
 
             if j["description"] == i["description"]:
-                print("Match!")
                 quantity = int(i["qty"]) + int(j["qty"])
                 j["qty"] = str(quantity)
                 item_updated = True

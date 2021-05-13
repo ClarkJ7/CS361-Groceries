@@ -26,10 +26,10 @@
         		<ul>
         			{% for ingredient in session['ingredients'] %}
         			<li>
-        				<a style="color:red">{{ingredient['qty']}}</a>
-        				<a style="color:blue">{{ingredient['unit']}}</a>
+        				<a style="color:red">{{ingredient['qty'] if  ingredient['qty'] != 0}}</a>
+        				<a style="color:blue">{{ingredient['unit'] if  ingredient['unit'] != "unk"}}</a>
         				<a>{{ingredient['description']}}</a>
-        				<a href="/<{{ingredient['qty']}}>" value="{{ingredient}}">TEST</a>
+        				<a href="{{ url_for('delete_ingredient', item=ingredient['description']) }}">Remove</a>
         			</li>
         			{% endfor %}
         		</ul>
@@ -41,8 +41,8 @@
         		<ul>
         			{% for item in session['groceries'] %}
         			<li>
-        				<a style="color:red">{{item['qty']}}</a>
-        				<a style="color:blue">{{item['unit']}}</a>
+        				<a style="color:red">{{item['qty'] if  item['qty'] != 0}}</a>
+        				<a style="color:blue">{{item['unit'] if  item['unit'] != "unk"}}</a>
         				<a>{{item['description']}}</a>
         			</li>
         			{% endfor %}

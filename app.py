@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session, request, url_for
 import requests
 from grocerySort import sort_recipe, combine_groceries
 
@@ -20,11 +20,11 @@ def index():
         if response.status_code == 200:
             # store ingredients in session variable
             session['ingredients'] = sort_recipe(response.json())
-            return render_template('home.html', ingredients=session['ingredients'])
+            return render_template('test.html', ingredients=session['ingredients'])
         else:
-            return render_template('home.html', warning="Recipe Not Found")
+            return render_template('test.html', warning="Recipe Not Found")
     if request.method == 'GET':
-        return render_template('home.html')
+        return render_template('test.html')
 
 
 @app.route('/reset')
@@ -32,7 +32,7 @@ def reset():
     # clear ingredient and groceries session variables
     session.pop('ingredients', None)
     session.pop('groceries', None)
-    return render_template('home.html')
+    return render_template('test.html')
 
 
 @app.route('/add-recipe', methods=['GET', 'POST'])
@@ -46,14 +46,24 @@ def add_recipe():
         else:
             session['groceries'] = session['ingredients']
         session.pop('ingredients', None)
-        return render_template('home.html', groceries=session['groceries'])
+        return render_template('test.html', groceries=session['groceries'])
     else:
-        return render_template('home.html')
+        return render_template('test.html')
 
 
 @app.route('/view-list')
 def view_list():
-    return render_template('viewlist.html', groceries=session['groceries'])
+    if session.get('groceries'):
+        return render_template('viewlist.html', groceries=session['groceries'])
+
+
+@app.route('/delete-ingredient/<item>')
+def delete_ingredient(item):
+    for i in range(len(session['ingredients'])):
+        if session['ingredients'][i]["description"] == item:
+            session['ingredients'].pop(i)
+            session.modified = True
+            return render_template('test.html', ingredients=session['ingredients'])
 
 
 if __name__ == "__main__":

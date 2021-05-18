@@ -15,10 +15,12 @@
         				<input type="text" name="wikiURL"></input>
         				<input type="submit" value="Get Recipe"></input>
     				</form>
+    				<p style="font-size: 10px; text-align: center">Enter any recipe found at https://en.wikibooks.org/wiki/Cookbook:Recipes</p>
+    				<br>
   				</div>
   	 		</div>
   	 		<div class="col-md-3">
-  	 			<a class="bigbutton">Find Stores Near Me</a>
+  	 			<a href="/find-stores" class="bigbutton" target="_blank">Find Stores Near: {{location}}</a>
   	 		</div>
   	 		<div class="col-md-3">
   	 			<a href="/reset" class="bigbutton">Reset</a>
@@ -74,6 +76,7 @@
         						<a style="color:red">{{item['qty'] if  item['qty'] != 0}}</a>
         						<a style="color:blue">{{item['unit'] if  item['unit'] != "unk"}}</a>
         						<a>{{item['description']}}</a>
+        						<a  class="smallbutton" href="{{ url_for('delete_grocery', item=item['description']) }}">Remove</a>
         					</li>
         					{% endfor %}
         				</ul>

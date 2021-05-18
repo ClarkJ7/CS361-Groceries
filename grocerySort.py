@@ -1,12 +1,11 @@
 import re
 from fractions import Fraction
+import unicodedata
+import string
 
 UNITS = ("whole", "half", "quarter", "third", "teaspoon", "teaspoons", "tsp", "tablespoon", "tablespoons", "tbsp",
          "tin", "drops", "cloves", "millilitres", "ml", "oz", "ounce", "ounces", "grams", "ounces", "kilograms", "lb", "pound",
-         "pounds", "can", "cans", "pint", "pints", "gallon", "quart", "cup")
-
-QTY_IDENTIFIERS = {"powder": "oz", "leaves": "oz", "sauce": "tablespoon", "chicken": "lb", "pork": "lb", "beef": "lb",
-                   "wine": "tablespoon"}
+         "pounds", "can", "cans", "pint", "pints", "gallon", "quart", "cup", "t.", "T.", "cups")
 
 SIZES = ("small ", "medium ", "large ")
 
@@ -14,19 +13,34 @@ SIZES = ("small ", "medium ", "large ")
 def sort_recipe(ingredients_list):
     sorted_list = []
     for item in ingredients_list:
-
         # cut list off before or after "or" in line
+        length = len(item)
         if " or " in item:
-            length = len(item)
             or_loc = re.search(r'\b(or)\b', item)
             if or_loc.start() > int(length/2):
                 item = item[:or_loc.start()-1]
             else:
                 item = item[or_loc.start()+3:]
+        # cut list off after "to" in line
+        if " to " in item:
+            to_loc = re.search(r'\b(to)\b', item)
+            item = item[to_loc.start()+3:]
+
+        # remove anything after a comma
+        try:
+            item = item[:item.index(",")]
+        except ValueError:
+            pass
 
         # remove salt from ingredient list
-        #if " salt" in item:
-            #continue
+        if "salt" in item:
+            print("salt removed")
+            continue
+
+        # remove salt from ingredient list
+        if "water" in item:
+            print("water removed")
+            continue
 
         # remove of from line
         item = item.replace("of ", "")
@@ -44,16 +58,26 @@ def sort_recipe(ingredients_list):
         # split string into list for parsing
         item = item.split(" ")
 
-        # check if line contains qty value add
+        # check if line contains qty value
         try:
             if float(Fraction(item[0])):
                 quantity = item.pop(0)
         except ValueError:
             quantity = 0
 
+        # check for vulgar fraction
+        try:
+            if unicodedata.numeric(item[0]):
+                quantity = item.pop(0)
+        except:
+            pass
+
         # if line contains unit value add
         if item[0].lower() in UNITS:
             unit = item.pop(0).lower()
+        elif item[0].lower == "to" or item[0].lower == "or":
+            item.pop(0)
+
         else:
             unit = "unk"
 
@@ -73,9 +97,10 @@ def combine_groceries(ingredients, groceries):
         for j in groceries:
 
             if j["description"] == i["description"]:
-                quantity = int(i["qty"]) + int(j["qty"])
-                j["qty"] = str(quantity)
-                item_updated = True
+                if j["qty"] == i["qty"]:
+                    quantity = float(Fraction(i['qty'])) + float(Fraction(j['qty']))
+                    j["qty"] = str(quantity)
+                    item_updated = True
 
         if item_updated is False:
             item = {"description": i["description"], "qty": i["qty"], "unit": i["unit"]}

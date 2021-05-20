@@ -9,9 +9,13 @@ app.config['SECRET_KEY'] = 'password'
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Obtain current location of user using Nick Alvey's microservice
+
     loc_response = requests.get("https://alveyn-cs361-getlocation.herokuapp.com/getlocation")
-    session['location'] = loc_response.json()
-    session['location_printout'] = session['location']['City'] + ", " + session['location']['Region']
+    if loc_response == 200:
+        session['location'] = loc_response.json()
+        session['location_printout'] = session['location']['City'] + ", " + session['location']['Region']
+    else:
+        session['location_printout'] = "Location ERROR"
 
     if request.method == 'POST':
         # retrieve dish name from searchbar

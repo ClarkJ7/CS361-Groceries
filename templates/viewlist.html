@@ -1,42 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Grocery List</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
-  	<link rel="stylesheet" type="text/css" href="/static/styles.css">
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+  	<title>Grocery List</title>
+</head>
 </head>
 <body>
 	<div class="container">
-  		<div class="row">
-  			<div class="col">
-  				<table id="outline">
-  					<thead>
-  						<tr>
-  							<td class="tablehead">Grocery List</td>
-  						</tr>
-  					</thead>
-  					<tbody>
-  						<tr><td>
-  						<ul>
-      						{% for items in session['groceries'] %}
-        					<li>
-        						<a style="color:red">{{items['qty'] if  items['qty'] != 0}}</a>
-        						<a style="color:blue">{{items['unit'] if  items['unit'] != "unk"}}</a>
-        						<a>{{items['description']}}</a>
-        					</li>
-        					{% endfor %}
-        				</ul>
-        				</td></tr>
-        			</tbody>
-        			<tfoot>
-        				<tr><td>
-        				<a href="/" class="bigbutton">Return</a>
-        				</td></tr>
-        			</tfoot>
-        		</table>
+  		<div class="row justify-content-center">
+
+  			<div class="col-sm-6">
+  				<div class="card h-100">
+  					<div class="card-header text-center">
+  	 					Ingredients
+  	 				</div>
+  	 				<div class="card-body">
+  	 						{% for item in session['groceries'] %}
+  	 						<div class="d-flex bd-highlight mb-3">
+  	 							<div class="px-1" style="color:red">{{item['qty'] if  item['qty'] != 0}}</div>
+  	 							<div class="px-1" style="color:blue">{{item['unit'] if  item['unit'] != "unk"}}</div>
+  	 							<div class="px-1">{{item['description']}}</div>
+  	 							<div class="px-1 ms-auto">
+  	 								<a href="{{ url_for('delete_grocery', item=item['description']) }}"><button type="button" class="btn btn-danger btn-sm">Remove</button></a>
+  	 							</div>
+  							</div>
+  							{% endfor %}
+  	 				</div>
+  	 				<div class="card-footer text-center">
+  	 					<a class="card-block text-decoration-none" href="/add-recipe">Return</a>
+  	 				</div>
+  	 			</div>
         	</div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 </body>
 </html>

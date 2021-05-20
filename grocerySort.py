@@ -18,7 +18,7 @@ WEIGHT_UNITS = ("gram", "g",
                 "pound", "lb",
                 "kilogram", "kg")
 
-MISC_UNITS = ("tin", "container", "can", "clove")
+MISC_UNITS = ("tin", "container", "can", "clove", "slice", "loaf")
 
 FRACTIONS = ("whole", "half", "quarter", "third")
 

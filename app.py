@@ -11,7 +11,7 @@ def index():
     # Obtain current location of user using Nick Alvey's microservice
 
     loc_response = requests.get("https://alveyn-cs361-getlocation.herokuapp.com/getlocation")
-    if loc_response == 200:
+    if loc_response.status_code == 200:
         session['location'] = loc_response.json()
         session['location_printout'] = session['location']['City'] + ", " + session['location']['Region']
     else:

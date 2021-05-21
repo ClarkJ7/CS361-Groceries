@@ -1,56 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Grocery List</title>
-  	<link rel="stylesheet" type="text/css" href="/static/styles.css">
+  <title>Grocery List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
 </head>
 
 <body>
+  <div class="container">
+      <div class="row">
+        <div class="col-md-6"> 
+          <div class="searchBar">
+            <form action="/" method="POST">
+                <input type="text" name="wikiURL"></input>
+                <input type="submit" value="Get Recipe"></input>
+            </form>
+            <p style="font-size: 10px; text-align: center">Enter any recipe found at https://en.wikibooks.org/wiki/Cookbook:Recipes</p>
+            <br>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <a href="/find-stores" class="bigbutton" target="_blank">Find Stores Near: {{location}}</a>
+        </div>
+        <div class="col-md-3">
+          <a href="/reset" class="bigbutton">Reset</a>
+        </div>
+      </div>
 
-  	<div class="searchBar">
-    	<form action="/" method="POST">
-        	<input type="text" name="wikiURL"></input>
-        	<input type="submit" value="Get Recipe"></input>
-    	</form>
-    	<br>
-    	<a class="bigbutton">Find Stores Near Me</a>
+  </div>
 
-  	</div>
-  		<br>
-		<a href="/reset">Reset</a><a>{{warning}}</a>
-		<br>
-  	<table id="outline">
-    	<tr>
-      		<td>
-      			<p class="tablehead">Ingredients</p>
-        		<ul>
-        			{% for ingredient in session['ingredients'] %}
-        			<li>
-        				<a style="color:red">{{ingredient['qty'] if  ingredient['qty'] != 0}}</a>
-        				<a style="color:blue">{{ingredient['unit'] if  ingredient['unit'] != "unk"}}</a>
-        				<a>{{ingredient['description']}}</a>
-        				<a href="{{ url_for('delete_ingredient', item=ingredient['description']) }}">Remove</a>
-        			</li>
-        			{% endfor %}
-        		</ul>
-        		<a href="/add-recipe" class="bigbutton">Add to Grocery List</a>
-      		</td>
-      		
-      		<td>
-      			<p class="tablehead">Grocery List</p>
-        		<ul>
-        			{% for item in session['groceries'] %}
-        			<li>
-        				<a style="color:red">{{item['qty'] if  item['qty'] != 0}}</a>
-        				<a style="color:blue">{{item['unit'] if  item['unit'] != "unk"}}</a>
-        				<a>{{item['description']}}</a>
-        			</li>
-        			{% endfor %}
-        		</ul>
-        		<a href="/view-list" class="bigbutton">Export Grocery List</a>
-      		</td>
-    	</tr>
-    </table>
+  <br>
 
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <table id="outline">
+            <thead>
+              <tr>
+                <td class="tablehead">Ingredients</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>
+              <ul>
+                  {% for ingredient in session['ingredients'] %}
+                  <li>
+                    <a style="color:red">{{ingredient['qty'] if  ingredient['qty'] != 0}}</a>
+                    <a style="color:blue">{{ingredient['unit'] if  ingredient['unit'] != "unk"}}</a>
+                    <a>{{ingredient['description']}}</a>
+                    <a  class="smallbutton" href="{{ url_for('delete_ingredient', item=ingredient['description']) }}">Remove</a>
+                  </li>
+                  {% endfor %}
+                </ul>
+                </td></tr>
+              </tbody>
+              <tfoot>
+                <tr><td>
+                <a href="/add-recipe" class="bigbutton">Add to Grocery List</a>
+                </td></tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="col">
+          <table id="outline">
+            <thead>
+              <tr>
+                <td class="tablehead">Groceries</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>
+              <ul>
+                  {% for item in session['groceries'] %}
+                  <li>
+                    <a style="color:red">{{item['qty'] if  item['qty'] != 0}}</a>
+                    <a style="color:blue">{{item['unit'] if  item['unit'] != "unk"}}</a>
+                    <a>{{item['description']}}</a>
+                    <a  class="smallbutton" href="{{ url_for('delete_grocery', item=item['description']) }}">Remove</a>
+                  </li>
+                  {% endfor %}
+                </ul>
+                </td></tr>
+              </tbody>
+              <tfoot>
+                <tr><td>
+                <a href="/view-list" class="bigbutton">Export Grocery List</a>
+                </td></tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+    </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 </body>
 </html>

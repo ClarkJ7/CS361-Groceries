@@ -44,7 +44,7 @@ def reset():
     # clear ingredient and groceries session variables
     session.pop('ingredients', None)
     session.pop('groceries', None)
-    return render_template('test.html')
+    return render_template('test.html', location=session['location_printout'])
 
 
 @app.route('/add-recipe', methods=['GET', 'POST'])

@@ -24,6 +24,16 @@ FRACTIONS = ("whole", "half", "quarter", "third")
 
 SIZES = ("small ", "medium ", "large ")
 
+UNIT_DICT = {"ounce": 1,"oz": 1,
+             "teaspoon": 0.167, "tsp": 0.167,
+             "tablespoon": 0.5, "tbsp": 0.5,
+             "cup": 8,
+             "pint": 16, "pt": 16,
+             "quart": 32, "qt": 32,
+             "gallon": 128, "gal": 128,
+             "milliliter": 0.034, "ml": 0.034,
+             "liter": 34, "l": 34}
+
 
 def sort_recipe(ingredients_list):
     sorted_list = []
@@ -46,6 +56,7 @@ def sort_recipe(ingredients_list):
 
         # use rest of line to create item description
         desc = " ".join(item)
+        desc = desc.strip()
         output = {"description": desc, "qty": quantity, "unit": unit}
         sorted_list.append(output)
 
@@ -153,9 +164,13 @@ def combine_groceries(ingredients, groceries):
         for j in groceries:
 
             if j["description"] == i["description"]:
-                if j["qty"] == i["qty"]:
-                    quantity = float(Fraction(i['qty'])) + float(Fraction(j['qty']))
-                    j["qty"] = str(quantity)
+                if j["unit"] in UNIT_DICT and i["unit"] in UNIT_DICT:
+                    j_qty = convert_fraction(j["qty"])
+                    i_qty = convert_fraction(i["qty"])
+                    test1 = j_qty*float(UNIT_DICT[j["unit"]])
+                    test2 = i_qty*float(UNIT_DICT[i["unit"]])
+                    output = (test1 + test2) / UNIT_DICT[j["unit"]]
+                    j["qty"] = str(output)
                     item_updated = True
 
         if item_updated is False:
@@ -163,3 +178,15 @@ def combine_groceries(ingredients, groceries):
             groceries.append(item)
 
     return groceries
+
+
+def convert_fraction(item):
+    try:
+        output = float(unicodedata.numeric(item))
+    except (TypeError, ValueError):
+        try:
+            output = float(Fraction(item))
+        except ValueError:
+            output = 1
+
+    return output

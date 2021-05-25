@@ -44,6 +44,7 @@ def reset():
     # clear ingredient and groceries session variables
     session.pop('ingredients', None)
     session.pop('groceries', None)
+    session.pop('in_cart', None)
     return render_template('test.html', location=session['location_printout'])
 
 
@@ -60,15 +61,8 @@ def add_recipe():
         session.pop('ingredients', None)
         return render_template('test.html', groceries=session['groceries'], location=session['location_printout'])
     else:
-        return render_template('test.html')
+        return render_template('test.html', location=session['location_printout'])
 
-
-@app.route('/view-list')
-def view_list():
-    if session.get('groceries'):
-        return render_template('viewlist.html', groceries=session['groceries'], location=session['location_printout'])
-    else:
-        return render_template('test.html')
 
 @app.route('/delete-ingredient/<item>')
 def delete_ingredient(item):
@@ -87,11 +81,52 @@ def delete_grocery(item):
             session.modified = True
             return render_template('test.html', ingredients=session['groceries'], location=session['location_printout'])
 
+
 @app.route('/find-stores')
 def find_stores():
     url = "https://www.google.com/maps/search/groceries/@"+session['location']['latitude']+\
           ","+session['location']['longitude']+",12z/data=!3m1!4b1"
     return redirect(url, code=200)
+
+
+@app.route('/view-list')
+def view_list():
+    if session.get('groceries'):
+        return render_template('viewlist.html', groceries=session['groceries'], location=session['location_printout'])
+    else:
+        return render_template('test.html')
+
+
+@app.route('/found_grocery/<item>')
+def found_grocery(item):
+    for i in range(len(session['groceries'])):
+        if session['groceries'][i]["description"] == item:
+            if session.get('in_cart'):
+                item = session['groceries'].pop(i)
+                session['in_cart'].append(item)
+            else:
+                session['in_cart'] = []
+                item = session['groceries'].pop(i)
+                session['in_cart'].append(item)
+            session.modified = True
+
+            return render_template('viewlist.html', ingredients=session['groceries'], in_cart=session['in_cart'])
+
+
+@app.route('/undo_incart/<item>')
+def undo_incart(item):
+    for i in range(len(session['in_cart'])):
+        if session['in_cart'][i]["description"] == item:
+            if session.get('groceries'):
+                item = session['in_cart'].pop(i)
+                session['groceries'].append(item)
+            else:
+                session['groceries'] = []
+                item = session['in_cart'].pop(i)
+                session['groceries'].append(item)
+            session.modified = True
+
+            return render_template('viewlist.html', ingredients=session['groceries'], in_cart=session['in_cart'])
 
 
 if __name__ == "__main__":

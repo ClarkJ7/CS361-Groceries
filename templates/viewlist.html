@@ -11,12 +11,12 @@
 </head>
 <body>
 	<div class="container">
-  		<div class="row justify-content-center">
+  		<div class="row justify-content-center pt-4">
 
   			<div class="col-sm-6">
   				<div class="card h-100">
   					<div class="card-header text-center">
-  	 					Ingredients
+  	 					Grocery List
   	 				</div>
   	 				<div class="card-body">
   	 						{% for item in session['groceries'] %}
@@ -25,7 +25,17 @@
   	 							<div class="px-1" style="color:blue">{{item['unit'] if  item['unit'] != "unk"}}</div>
   	 							<div class="px-1">{{item['description']}}</div>
   	 							<div class="px-1 ms-auto">
-  	 								<a href="{{ url_for('delete_grocery', item=item['description']) }}"><button type="button" class="btn btn-danger btn-sm">Remove</button></a>
+  	 								<a href="{{ url_for('found_grocery', item=item['description']) }}"><button type="button" class="btn btn-success btn-sm">Got it</button></a>
+  	 							</div>
+  							</div>
+  							{% endfor %}
+  							{% for item in session['in_cart'] %}
+  	 						<div class="d-flex bd-highlight mb-3">
+  	 							<div class="px-1" style="text-decoration: line-through; color: lightgrey">{{item['qty'] if  item['qty'] != 0}}</div>
+  	 							<div class="px-1" style="text-decoration: line-through; color: lightgrey">{{item['unit'] if  item['unit'] != "unk"}}</div>
+  	 							<div class="px-1" style="text-decoration: line-through; color: lightgrey">{{item['description']}}</div>
+  	 							<div class="px-1 ms-auto">
+  	 								<a href="{{ url_for('undo_incart', item=item['description']) }}"><button type="button" class="btn btn-secondary btn-sm">Undo</button></a>
   	 							</div>
   							</div>
   							{% endfor %}
